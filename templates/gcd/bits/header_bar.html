@@ -1,0 +1,51 @@
+{% load url from future %}
+{% load staticfiles %}
+
+{% if MYCOMICS %}
+<!-- Redesign not yet extended to mycomics -->
+<div class="my_search_bar">
+{% else %}
+<div class="header_bar">
+{% endif %}
+
+  <img src="{% static "img/oval.svg" %}" id="bar_oval">
+  <a href="{% url "apps.gcd.views.index" %}" id="bar_logo">
+    <img src="{% static "img/gcd_logo.png" %}" alt="GCD">
+  </a>
+  <span class="donate_link"><a method="post" href="{% url "donate" %}">Donate</a></span>
+
+  <form action="{% url "apps.gcd.views.search.search" %}" method="get" id="header_search_form">
+    <!-- had to include background image css in html to use Django relative path for static img -->
+    <input type="submit" value="Go" id="bar_submit" 
+    style="background-image:url('{% static "img/search-white.svg" %}')"
+    />
+
+    <input type="text" name="query" size="15" value="{{ search_term|default:"" }}">    
+
+    {% include "gcd/bits/search_for.html" %}
+
+  </form>
+
+
+
+{% if user.is_authenticated %}
+  {% if MYCOMICS %}
+  <a href="{% url "collections_list" %}">Collections</a> |
+  {% endif %}
+  <form action="{% url "logout" %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" name="logout" value="Log Out" />
+    <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+  </form>
+{% else %}
+
+  <form action="/accounts/login/" method="GET">
+    <input type="submit" name="login" value="Log In" id="login_button"/>
+    <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+  </form>
+
+{% endif %}
+</div>
+{% if USE_TEMPLATESADMIN %}
+{% include "managed_content/gcd/messages/survey_banner.html" %}
+{% endif %}

@@ -1,9 +1,8 @@
 {% extends "gcd/base.html" %}
 
 {% block body %}
-  {% include "gcd/bits/search_bar.html" %}
+  {% include "gcd/bits/header_bar.html" %}
 
   {% block view_body %}{% endblock %}
-
-  {% include "gcd/bits/search_bar.html" %}
+  <!-- original includes search_bar twice -->
 {% endblock %}
